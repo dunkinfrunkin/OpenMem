@@ -2,9 +2,17 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
+
+
+def _claude_env() -> dict[str, str]:
+    """Return a clean env that allows calling claude from within Claude Code."""
+    env = os.environ.copy()
+    env.pop("CLAUDECODE", None)
+    return env
 
 
 def install() -> None:
@@ -15,26 +23,21 @@ def install() -> None:
         print("  https://docs.anthropic.com/en/docs/claude-code")
         sys.exit(1)
 
-    # Check if already installed
-    result = subprocess.run(
-        [claude, "mcp", "list"],
-        capture_output=True,
-        text=True,
-    )
-    if "openmem" in result.stdout:
-        print("OpenMem is already installed in Claude Code.")
-        print("To reinstall, run: claude mcp remove openmem")
-        return
-
     # Add the MCP server
     print("Adding OpenMem to Claude Code...")
     result = subprocess.run(
-        [claude, "mcp", "add", "openmem", "--", "uvx", "openmem-engine", "serve"],
+        [claude, "mcp", "add", "-s", "user", "openmem", "--", "uvx", "openmem-engine", "serve"],
         capture_output=True,
         text=True,
+        env=_claude_env(),
     )
     if result.returncode != 0:
-        print(f"Error: {result.stderr.strip()}")
+        stderr = result.stderr.strip()
+        if "already exists" in stderr:
+            print("OpenMem is already installed in Claude Code.")
+            print("To reinstall, first run: uvx openmem-engine uninstall")
+            return
+        print(f"Error: {stderr}")
         sys.exit(1)
 
     print("Done! OpenMem is now available in Claude Code.")
@@ -56,9 +59,10 @@ def uninstall() -> None:
 
     print("Removing OpenMem from Claude Code...")
     result = subprocess.run(
-        [claude, "mcp", "remove", "openmem"],
+        [claude, "mcp", "remove", "-s", "user", "openmem"],
         capture_output=True,
         text=True,
+        env=_claude_env(),
     )
     if result.returncode != 0:
         print(f"Error: {result.stderr.strip()}")
@@ -69,8 +73,6 @@ def uninstall() -> None:
 
 def main() -> None:
     """CLI entry point."""
-    from openmem.mcp_server import main as serve
-
     if len(sys.argv) < 2:
         print("Usage: openmem-engine <command>")
         print()
@@ -87,6 +89,7 @@ def main() -> None:
     elif command == "uninstall":
         uninstall()
     elif command == "serve":
+        from openmem.mcp_server import main as serve
         serve()
     else:
         print(f"Unknown command: {command}")

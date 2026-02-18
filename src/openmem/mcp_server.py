@@ -43,7 +43,7 @@ engine.decay_all()
 
 mcp = FastMCP(
     "openmem",
-    description="Persistent cognitive memory for Claude Code",
+    instructions="Persistent cognitive memory for Claude Code",
 )
 
 # ---------------------------------------------------------------------------

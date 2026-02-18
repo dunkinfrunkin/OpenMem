@@ -335,24 +335,24 @@ wheels = [
 ]
 
 [[package]]
-name = "openmem"
-version = "0.1.0"
+name = "openmem-engine"
+version = "0.2.0"
 source = { editable = "." }
+dependencies = [
+    { name = "mcp" },
+]
 
 [package.optional-dependencies]
 dev = [
     { name = "pytest" },
 ]
-mcp = [
-    { name = "mcp" },
-]
 
 [package.metadata]
 requires-dist = [
-    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.0" },
+    { name = "mcp", specifier = ">=1.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
 ]
-provides-extras = ["dev", "mcp"]
+provides-extras = ["dev"]
 
 [[package]]
 name = "packaging"
