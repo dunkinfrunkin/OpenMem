@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "openmem-engine"
-version = "0.2.0"
+version = "0.4.0"
 description = "Cognitive memory engine for AI agents — human-inspired retrieval via activation, competition, and reconstruction"
 license = "MIT"
 requires-python = ">=3.10"
