@@ -11,11 +11,11 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://yourorg.github.io',
-  baseUrl: '/openmem/',
+  url: 'https://dunkinfrunkin.github.io',
+  baseUrl: '/OpenMem/',
 
-  organizationName: 'yourorg',
-  projectName: 'openmem',
+  organizationName: 'dunkinfrunkin',
+  projectName: 'OpenMem',
 
   onBrokenLinks: 'throw',
 
@@ -36,7 +36,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/yourorg/openmem/tree/main/web/',
+          editUrl: 'https://github.com/dunkinfrunkin/OpenMem/tree/main/web/',
         },
         blog: false,
         theme: {
@@ -60,7 +60,7 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          href: 'https://github.com/yourorg/openmem',
+          href: 'https://github.com/dunkinfrunkin/OpenMem',
           label: 'GitHub',
           position: 'right',
         },
@@ -79,7 +79,7 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {label: 'GitHub', href: 'https://github.com/yourorg/openmem'},
+            {label: 'GitHub', href: 'https://github.com/dunkinfrunkin/OpenMem'},
           ],
         },
       ],
