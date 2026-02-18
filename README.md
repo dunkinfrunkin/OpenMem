@@ -18,7 +18,7 @@ No vectors, no embeddings, no LLM in the retrieval loop. The LLM is the consumer
 ## Install
 
 ```bash
-pip install openmem
+pip install openmem-engine
 ```
 
 Or from source:
@@ -56,7 +56,7 @@ for r in results:
 Install OpenMem as a Claude Code plugin to get persistent memory across sessions:
 
 ```bash
-pip install openmem "mcp>=1.0"
+pip install openmem-engine "mcp>=1.0"
 claude plugin install --path ./plugin
 ```
 

@@ -33,13 +33,13 @@ No vectors, no embeddings, no LLM in the retrieval loop. The LLM is the consumer
 ## Install
 
 ```bash
-pip install openmem
+pip install openmem-engine
 ```
 
 Or install as a [Claude Code plugin](./claude-code) for persistent memory across coding sessions:
 
 ```bash
-pip install openmem "mcp>=1.0"
+pip install openmem-engine "mcp>=1.0"
 claude plugin install --path ./plugin
 ```
 

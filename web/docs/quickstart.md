@@ -8,7 +8,7 @@ title: Quick Start
 ## Installation
 
 ```bash
-pip install openmem
+pip install openmem-engine
 ```
 
 Or from source:

@@ -19,7 +19,7 @@ flowchart LR
 ### Prerequisites
 
 ```bash
-pip install openmem "mcp>=1.0"
+pip install openmem-engine "mcp>=1.0"
 ```
 
 ### Install the plugin
