@@ -1,0 +1,98 @@
+"""OpenMem CLI — install and manage the Claude Code MCP integration."""
+
+from __future__ import annotations
+
+import shutil
+import subprocess
+import sys
+
+
+def install() -> None:
+    """Install OpenMem as a Claude Code MCP server."""
+    claude = shutil.which("claude")
+    if not claude:
+        print("Error: 'claude' CLI not found. Install Claude Code first:")
+        print("  https://docs.anthropic.com/en/docs/claude-code")
+        sys.exit(1)
+
+    # Check if already installed
+    result = subprocess.run(
+        [claude, "mcp", "list"],
+        capture_output=True,
+        text=True,
+    )
+    if "openmem" in result.stdout:
+        print("OpenMem is already installed in Claude Code.")
+        print("To reinstall, run: claude mcp remove openmem")
+        return
+
+    # Add the MCP server
+    print("Adding OpenMem to Claude Code...")
+    result = subprocess.run(
+        [claude, "mcp", "add", "openmem", "--", "uvx", "openmem-engine", "serve"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"Error: {result.stderr.strip()}")
+        sys.exit(1)
+
+    print("Done! OpenMem is now available in Claude Code.")
+    print()
+    print("Start a new Claude Code session and Claude will have access to:")
+    print("  memory_store, memory_recall, memory_link,")
+    print("  memory_reinforce, memory_supersede, memory_contradict,")
+    print("  memory_stats")
+    print()
+    print(f"Memories are stored in ~/.openmem/memories.db")
+
+
+def uninstall() -> None:
+    """Remove OpenMem from Claude Code."""
+    claude = shutil.which("claude")
+    if not claude:
+        print("Error: 'claude' CLI not found.")
+        sys.exit(1)
+
+    print("Removing OpenMem from Claude Code...")
+    result = subprocess.run(
+        [claude, "mcp", "remove", "openmem"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"Error: {result.stderr.strip()}")
+        sys.exit(1)
+
+    print("Done. OpenMem has been removed from Claude Code.")
+
+
+def main() -> None:
+    """CLI entry point."""
+    from openmem.mcp_server import main as serve
+
+    if len(sys.argv) < 2:
+        print("Usage: openmem-engine <command>")
+        print()
+        print("Commands:")
+        print("  install    Add OpenMem to Claude Code")
+        print("  uninstall  Remove OpenMem from Claude Code")
+        print("  serve      Start the MCP server (used by Claude Code)")
+        sys.exit(0)
+
+    command = sys.argv[1]
+
+    if command == "install":
+        install()
+    elif command == "uninstall":
+        uninstall()
+    elif command == "serve":
+        serve()
+    else:
+        print(f"Unknown command: {command}")
+        print("Run 'openmem-engine' with no arguments for usage.")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

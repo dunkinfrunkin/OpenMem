@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "openmem": {
-      "command": "python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/openmem_server.py"],
+      "command": "openmem-server",
+      "args": [],
       "env": {}
     }
   }

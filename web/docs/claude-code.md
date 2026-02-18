@@ -1,70 +1,39 @@
 ---
 sidebar_position: 3
-title: Claude Code Plugin
+title: Claude Code
 ---
 
-# Claude Code Plugin
+# Claude Code
 
-OpenMem ships as a Claude Code plugin — persistent memory across coding sessions with zero configuration.
+Add persistent memory to Claude Code with a single command.
 
 ```mermaid
 flowchart LR
-    User -->|slash commands| CC[Claude Code]
-    CC -->|MCP tools| Server[openmem-server]
+    CC[Claude Code] -->|MCP tools| Server[openmem-server]
     Server --> DB[(~/.openmem/memories.db)]
 ```
 
 ## Installation
 
-### Prerequisites
+```bash
+uvx openmem-engine install
+```
+
+That's it. Restart Claude Code and the 7 memory tools are available immediately.
+
+:::tip
+`uvx` runs the package in an isolated environment — no need to install anything globally. It comes with [uv](https://docs.astral.sh/uv/).
+:::
+
+### Uninstall
 
 ```bash
-pip install openmem-engine "mcp>=1.0"
-```
-
-### Install the plugin
-
-```bash
-# From a local clone
-claude plugin install --path /path/to/openmem/plugin
-
-# Or if you're in the repo root
-claude plugin install --path ./plugin
-```
-
-Restart Claude Code after installation.
-
-## Slash commands
-
-### `/openmem:recall [query]`
-
-Recall memories relevant to the current conversation. If you provide a query, it searches for that specifically. If you omit the query, Claude infers context from the conversation.
-
-```
-/openmem:recall authentication flow
-```
-
-Returns matching memories ranked by relevance, showing type, content, score, confidence, and strength.
-
-### `/openmem:store [content]`
-
-Store important information from the current conversation. If you provide content, it stores that directly. If omitted, Claude extracts key facts, decisions, and preferences from the conversation.
-
-```
-/openmem:store We decided to use JWT with 24h expiry for auth tokens
-```
-
-### `/openmem:status`
-
-Show memory store statistics — total memories, breakdown by status, edge count, and average strength.
-
-```
-/openmem:status
+uvx openmem-engine uninstall
 ```
 
 ## MCP tools
 
-The plugin registers an MCP server that exposes 7 tools Claude can call automatically during any conversation:
+Once added, Claude has 7 memory tools it can call automatically:
 
 | Tool | Description |
 |------|-------------|
@@ -133,18 +102,8 @@ No parameters. Returns counts and average strength.
 
 By default, memories are stored in `~/.openmem/memories.db`. Override with the `OPENMEM_DB` environment variable:
 
-```json
-{
-  "mcpServers": {
-    "openmem": {
-      "command": "python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/servers/openmem_server.py"],
-      "env": {
-        "OPENMEM_DB": "/path/to/custom/memories.db"
-      }
-    }
-  }
-}
+```bash
+claude mcp add openmem -e OPENMEM_DB=/path/to/custom/memories.db -- uvx openmem-engine serve
 ```
 
 ### Startup behavior
@@ -153,7 +112,7 @@ The MCP server runs `decay_all()` once on startup, so stale memories naturally l
 
 ## How it works under the hood
 
-The slash commands are thin prompts that guide Claude to use the MCP tools. The MCP server wraps the `MemoryEngine` class:
+The MCP server wraps the `MemoryEngine` class:
 
 1. **Store** — calls `engine.add()` and returns the memory ID
 2. **Recall** — runs the full retrieval pipeline (BM25 → spreading activation → competition → conflict resolution → token packing)
@@ -164,8 +123,4 @@ All data stays local in your SQLite database. Nothing is sent to external servic
 
 ## Verification
 
-After installation, verify the plugin is working:
-
-1. Run `/openmem:status` — should show store statistics (0 memories if fresh)
-2. Run `/openmem:store This is a test memory` — should confirm storage
-3. Run `/openmem:recall test` — should return the memory you just stored
+After installation, start a new Claude Code session and ask Claude to check the memory store. It should call `memory_stats` and report 0 memories if fresh. Then try asking it to remember something — it will call `memory_store` automatically.

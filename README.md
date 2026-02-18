@@ -53,22 +53,13 @@ for r in results:
 
 ## Claude Code plugin
 
-Install OpenMem as a Claude Code plugin to get persistent memory across sessions:
+One command to add persistent memory to Claude Code:
 
 ```bash
-pip install openmem-engine "mcp>=1.0"
-claude plugin install --path ./plugin
+uvx openmem-engine install
 ```
 
-Once installed, you get three slash commands:
-
-| Command | Description |
-|---------|-------------|
-| `/openmem:recall` | Recall memories relevant to the current conversation |
-| `/openmem:store` | Store key facts, decisions, and preferences from the conversation |
-| `/openmem:status` | Show memory store statistics |
-
-The plugin also registers an MCP server with 7 tools (`memory_store`, `memory_recall`, `memory_link`, `memory_reinforce`, `memory_supersede`, `memory_contradict`, `memory_stats`) that Claude can call automatically.
+That's it. Claude now has 7 memory tools (`memory_store`, `memory_recall`, `memory_link`, `memory_reinforce`, `memory_supersede`, `memory_contradict`, `memory_stats`) it can call automatically across sessions.
 
 Memories persist in `~/.openmem/memories.db` by default (override with the `OPENMEM_DB` env var).
 
