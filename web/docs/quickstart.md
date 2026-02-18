@@ -19,6 +19,10 @@ cd openmem
 pip install -e ".[dev]"
 ```
 
+:::tip
+Using Claude Code? Install the [Claude Code plugin](./claude-code) instead — it gives you slash commands and automatic memory tools with no code required.
+:::
+
 ## Your first memory engine
 
 ```python

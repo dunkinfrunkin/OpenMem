@@ -51,6 +51,27 @@ for r in results:
 # 0.500 | Postgres has better concurrent write support
 ```
 
+## Claude Code plugin
+
+Install OpenMem as a Claude Code plugin to get persistent memory across sessions:
+
+```bash
+pip install openmem "mcp>=1.0"
+claude plugin install --path ./plugin
+```
+
+Once installed, you get three slash commands:
+
+| Command | Description |
+|---------|-------------|
+| `/openmem:recall` | Recall memories relevant to the current conversation |
+| `/openmem:store` | Store key facts, decisions, and preferences from the conversation |
+| `/openmem:status` | Show memory store statistics |
+
+The plugin also registers an MCP server with 7 tools (`memory_store`, `memory_recall`, `memory_link`, `memory_reinforce`, `memory_supersede`, `memory_contradict`, `memory_stats`) that Claude can call automatically.
+
+Memories persist in `~/.openmem/memories.db` by default (override with the `OPENMEM_DB` env var).
+
 ## Usage with an LLM agent
 
 ```python

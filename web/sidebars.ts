@@ -4,6 +4,7 @@ const sidebars: SidebarsConfig = {
   docsSidebar: [
     'intro',
     'quickstart',
+    'claude-code',
     'configuration',
     'api',
     'retrieval',

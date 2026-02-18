@@ -36,6 +36,13 @@ No vectors, no embeddings, no LLM in the retrieval loop. The LLM is the consumer
 pip install openmem
 ```
 
+Or install as a [Claude Code plugin](./claude-code) for persistent memory across coding sessions:
+
+```bash
+pip install openmem "mcp>=1.0"
+claude plugin install --path ./plugin
+```
+
 ## Quick example
 
 ```python

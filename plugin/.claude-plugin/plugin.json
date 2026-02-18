@@ -1,0 +1,9 @@
+{
+  "name": "openmem",
+  "version": "0.1.0",
+  "description": "Persistent memory for Claude Code across sessions",
+  "author": { "name": "OpenMem" },
+  "repository": "https://github.com/yourorg/openmem",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

@@ -7,6 +7,10 @@ title: Agent Integration
 
 Patterns for wiring OpenMem into LLM-based agents.
 
+:::tip
+For Claude Code, the easiest path is the [Claude Code plugin](./claude-code) — it handles all the wiring for you via MCP and slash commands.
+:::
+
 ## Basic pattern
 
 ```mermaid
