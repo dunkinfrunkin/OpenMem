@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.venv/
+.pytest_cache/
+web/node_modules/
+web/build/
+web/.docusaurus/
