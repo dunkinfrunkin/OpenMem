@@ -7,6 +7,7 @@
   --ifm-color-primary-lighter: #a78bfa;
   --ifm-color-primary-lightest: #c4b5fd;
   --ifm-code-font-size: 95%;
+  --ifm-font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
@@ -19,4 +20,48 @@
   --ifm-color-primary-lighter: #ddd6fe;
   --ifm-color-primary-lightest: #ede9fe;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Tighter navbar */
+.navbar {
+  box-shadow: none;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.navbar__title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Code blocks */
+.theme-code-block {
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+}
+
+[data-theme='dark'] .theme-code-block {
+  border-color: var(--ifm-color-emphasis-300) !important;
+}
+
+/* Docs page */
+.markdown h1 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.markdown h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.markdown h3 {
+  font-weight: 600;
+}
+
+/* Tables in docs */
+.markdown table {
+  font-size: 0.92rem;
+}
+
+.markdown table code {
+  font-size: 0.85rem;
 }

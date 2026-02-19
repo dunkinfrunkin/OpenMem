@@ -5,6 +5,7 @@ const sidebars: SidebarsConfig = {
     'intro',
     'quickstart',
     'claude-code',
+    'web-ui',
     'configuration',
     'api',
     'retrieval',

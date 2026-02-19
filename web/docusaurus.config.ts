@@ -73,6 +73,8 @@ const config: Config = {
           title: 'Docs',
           items: [
             {label: 'Quick Start', to: '/docs/quickstart'},
+            {label: 'Claude Code', to: '/docs/claude-code'},
+            {label: 'Web UI', to: '/docs/web-ui'},
             {label: 'API Reference', to: '/docs/api'},
           ],
         },

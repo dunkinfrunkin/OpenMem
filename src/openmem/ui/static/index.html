@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenMem</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>OpenMem</h1>
+    <div id="stats" class="stats-bar">
+      <span id="stat-total">—</span>
+      <span id="stat-active">—</span>
+      <span id="stat-strength">—</span>
+      <span id="stat-edges">—</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input type="text" id="search-input" placeholder="Search memories..." autocomplete="off">
+      <select id="filter-type">
+        <option value="">All types</option>
+        <option value="fact">fact</option>
+        <option value="decision">decision</option>
+        <option value="preference">preference</option>
+        <option value="incident">incident</option>
+        <option value="plan">plan</option>
+        <option value="constraint">constraint</option>
+      </select>
+      <select id="filter-status">
+        <option value="">All statuses</option>
+        <option value="active">active</option>
+        <option value="superseded">superseded</option>
+        <option value="contradicted">contradicted</option>
+      </select>
+    </div>
+
+    <table id="memory-table">
+      <thead>
+        <tr>
+          <th data-sort="created_at" class="sortable active desc">Created</th>
+          <th data-sort="type" class="sortable">Type</th>
+          <th data-sort="status" class="sortable">Status</th>
+          <th data-sort="strength" class="sortable">Strength</th>
+          <th data-sort="confidence" class="sortable">Conf</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody id="memory-tbody"></tbody>
+    </table>
+
+    <div id="detail-panel" class="detail-panel hidden">
+      <div class="detail-header">
+        <h2>Memory Detail</h2>
+        <button id="detail-close" class="btn-close">&times;</button>
+      </div>
+      <div id="detail-content"></div>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

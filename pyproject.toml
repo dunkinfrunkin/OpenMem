@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-dependencies = ["mcp>=1.0"]
+dependencies = ["mcp>=1.0", "flask>=3.0"]
 
 [project.scripts]
 openmem-engine = "openmem.cli:main"

@@ -42,6 +42,12 @@ Or add to [Claude Code](./claude-code) for persistent memory across coding sessi
 uvx openmem-engine install
 ```
 
+Browse your memories in the [Web UI](./web-ui):
+
+```bash
+openmem-engine ui
+```
+
 ## Quick example
 
 ```python

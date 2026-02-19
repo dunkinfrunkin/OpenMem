@@ -24,7 +24,7 @@ pip install openmem-engine
 Or from source:
 
 ```bash
-git clone https://github.com/yourorg/openmem.git
+git clone https://github.com/dunkinfrunkin/OpenMem.git
 cd openmem
 pip install -e ".[dev]"
 ```
@@ -63,6 +63,16 @@ That's it. Claude now has 7 memory tools (`memory_store`, `memory_recall`, `memo
 
 Memories persist in `~/.openmem/memories.db` by default (override with the `OPENMEM_DB` env var).
 
+## Web UI
+
+Browse, search, and inspect your memory store visually:
+
+```bash
+openmem-engine ui
+```
+
+Opens a local web interface at `http://localhost:3333` with live search, sortable tables, filters by type/status, and a detail panel for inspecting individual memories and their graph edges. Use `--port` to change the port.
+
 ## Usage with an LLM agent
 
 ```python
@@ -81,6 +91,22 @@ prompt = f"""Relevant context from previous work:
 {context}
 
 User request: {user_message}"""
+```
+
+## CLI
+
+```
+openmem-engine <command>
+
+Commands:
+  install    Add OpenMem to Claude Code
+  uninstall  Remove OpenMem from Claude Code
+  status     Show memory store statistics
+  list       List stored memories
+  get        Get full details of a memory by ID
+  search     Search memories by query
+  ui         Launch web UI for browsing memories
+  serve      Start the MCP server (used by Claude Code)
 ```
 
 ## API
@@ -116,7 +142,7 @@ User request: {user_message}"""
 
 **Competition** — Final score combines activation (50%), recency (20%), strength (20%), and confidence (10%). Superseded memories are penalized 50%, contradicted ones 70%.
 
-**Conflict resolution** — When two contradicting memories both activate, the weaker one (by strength × confidence × recency) gets demoted.
+**Conflict resolution** — When two contradicting memories both activate, the weaker one (by strength x confidence x recency) gets demoted.
 
 ## Tests
 

@@ -14,7 +14,7 @@ pip install openmem-engine
 Or from source:
 
 ```bash
-git clone https://github.com/yourorg/openmem.git
+git clone https://github.com/dunkinfrunkin/OpenMem.git
 cd openmem
 pip install -e ".[dev]"
 ```
