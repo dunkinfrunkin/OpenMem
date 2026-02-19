@@ -3,9 +3,9 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'OpenMem',
+  title: 'openmem',
   tagline: 'Deterministic memory engine for AI agents',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/carrot.svg',
 
   future: {
     v4: true,
@@ -51,7 +51,13 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'OpenMem',
+      title: 'openmem',
+      logo: {
+        alt: 'openmem',
+        src: 'img/carrot.svg',
+        width: 28,
+        height: 28,
+      },
       items: [
         {
           type: 'docSidebar',
