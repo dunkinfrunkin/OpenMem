@@ -21,13 +21,7 @@ No vectors, no embeddings, no LLM in the retrieval loop. The LLM is the consumer
 pip install openmem-engine
 ```
 
-Or from source:
-
-```bash
-git clone https://github.com/dunkinfrunkin/OpenMem.git
-cd openmem
-pip install -e ".[dev]"
-```
+For local development, see [Local development](#local-development) below.
 
 ## Quick start
 
@@ -144,11 +138,49 @@ Commands:
 
 **Conflict resolution** — When two contradicting memories both activate, the weaker one (by strength x confidence x recency) gets demoted.
 
-## Tests
+## Local development
+
+Clone and install in editable mode:
 
 ```bash
+git clone https://github.com/dunkinfrunkin/OpenMem.git
+cd OpenMem
 pip install -e ".[dev]"
+```
+
+### Run the MCP server locally
+
+```bash
+openmem-engine serve
+```
+
+### Run the web UI locally
+
+```bash
+openmem-engine ui          # http://localhost:3333
+openmem-engine ui --port 8080
+```
+
+### Run tests
+
+```bash
 pytest tests/ -v
+```
+
+### Run the docs site locally
+
+```bash
+cd web
+npm install
+npm start          # http://localhost:3000
+```
+
+### Build the docs
+
+```bash
+cd web
+npm run build
+npm run serve      # preview the production build
 ```
 
 ## License
