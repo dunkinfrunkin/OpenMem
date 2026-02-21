@@ -23,6 +23,69 @@ def _get_db_path() -> str:
     return os.environ.get("OPENMEM_DB", DEFAULT_DB)
 
 
+def _find_project_root() -> str | None:
+    """If running from a local source tree, return the project root path."""
+    pkg_dir = Path(__file__).resolve().parent  # src/openmem/
+    for parent in pkg_dir.parents:
+        if (parent / "pyproject.toml").exists():
+            return str(parent)
+    return None
+
+
+def _install_cli_tool() -> None:
+    """Persistently install the openmem-engine CLI via uv tool or pipx."""
+    project_root = _find_project_root()
+
+    uv = shutil.which("uv")
+    if uv:
+        if project_root:
+            cmd = [uv, "tool", "install", "--force", "--editable", project_root]
+        else:
+            if shutil.which("openmem-engine"):
+                return  # already available
+            cmd = [uv, "tool", "install", "openmem-engine"]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            return
+
+    pipx = shutil.which("pipx")
+    if pipx:
+        if project_root:
+            cmd = [pipx, "install", "--force", "--editable", project_root]
+        else:
+            if shutil.which("openmem-engine"):
+                return
+            cmd = [pipx, "install", "openmem-engine"]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            return
+
+    print()
+    print("Note: Could not install the openmem-engine CLI globally.")
+    print("You can still use it via: uvx openmem-engine <command>")
+    print("Or install manually: uv tool install openmem-engine")
+
+
+def _uninstall_cli_tool() -> None:
+    """Remove the persistently installed openmem-engine CLI."""
+    uv = shutil.which("uv")
+    if uv:
+        subprocess.run(
+            [uv, "tool", "uninstall", "openmem-engine"],
+            capture_output=True,
+            text=True,
+        )
+        return
+
+    pipx = shutil.which("pipx")
+    if pipx:
+        subprocess.run(
+            [pipx, "uninstall", "openmem-engine"],
+            capture_output=True,
+            text=True,
+        )
+
+
 def install() -> None:
     """Install OpenMem as a Claude Code MCP server."""
     claude = shutil.which("claude")
@@ -33,8 +96,13 @@ def install() -> None:
 
     # Add the MCP server
     print("Adding OpenMem to Claude Code...")
+    project_root = _find_project_root()
+    if project_root:
+        serve_cmd = ["uv", "run", "--directory", project_root, "openmem-engine", "serve"]
+    else:
+        serve_cmd = ["uvx", "openmem-engine", "serve"]
     result = subprocess.run(
-        [claude, "mcp", "add", "-s", "user", "openmem", "--", "uvx", "openmem-engine", "serve"],
+        [claude, "mcp", "add", "-s", "user", "openmem", "--", *serve_cmd],
         capture_output=True,
         text=True,
         env=_claude_env(),
@@ -47,6 +115,9 @@ def install() -> None:
             return
         print(f"Error: {stderr}")
         sys.exit(1)
+
+    # Persistently install the CLI so `openmem-engine` works without `uvx`
+    _install_cli_tool()
 
     print("Done! OpenMem is now available in Claude Code.")
     print()
@@ -76,6 +147,7 @@ def uninstall() -> None:
         print(f"Error: {result.stderr.strip()}")
         sys.exit(1)
 
+    _uninstall_cli_tool()
     print("Done. OpenMem has been removed from Claude Code.")
 
 
