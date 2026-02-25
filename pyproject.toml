@@ -35,9 +35,10 @@ Issues = "https://github.com/dunkinfrunkin/OpenMem/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
+benchmark = ["chromadb>=0.4", "openai>=1.0"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/openmem"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "benchmarks"]
