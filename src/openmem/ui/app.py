@@ -30,6 +30,8 @@ def _memory_to_dict(mem) -> dict:
         "access_count": mem.access_count,
         "last_accessed": mem.last_accessed,
         "status": mem.status,
+        "source": mem.source,
+        "project": mem.project,
     }
 
 
@@ -76,6 +78,11 @@ def create_app(db_path: str | None = None) -> Flask:
         mem_status = request.args.get("status")
         if mem_status:
             memories = [m for m in memories if m.status == mem_status]
+
+        # Filter by source
+        mem_source = request.args.get("source")
+        if mem_source:
+            memories = [m for m in memories if m.source == mem_source]
 
         # Sort
         sort_by = request.args.get("sort", "created_at")
@@ -134,6 +141,38 @@ def create_app(db_path: str | None = None) -> Flask:
             }
             for sm in results
         ])
+
+    @app.route("/api/graph")
+    def api_graph():
+        engine = get_engine()
+        memories = engine.store.all_memories()
+        edges = engine.store.all_edges()
+
+        nodes = []
+        for m in memories:
+            label = m.gist or m.text
+            if label and len(label) > 60:
+                label = label[:59] + "\u2026"
+            nodes.append({
+                "id": m.id,
+                "type": m.type,
+                "status": m.status,
+                "strength": m.strength,
+                "label": label or "",
+                "project": m.project,
+                "source": m.source,
+            })
+
+        edge_list = [_edge_to_dict(e) for e in edges]
+        return jsonify({"nodes": nodes, "edges": edge_list})
+
+    @app.route("/api/sources")
+    def api_sources():
+        engine = get_engine()
+        rows = engine.store.conn.execute(
+            "SELECT source, COUNT(*) as count FROM memories WHERE status != 'deleted' GROUP BY source ORDER BY count DESC"
+        ).fetchall()
+        return jsonify([{"source": r["source"] or "", "count": r["count"]} for r in rows])
 
     @app.route("/api/memories/<memory_id>/reinforce", methods=["POST"])
     def api_reinforce(memory_id):

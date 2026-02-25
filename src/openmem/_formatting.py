@@ -20,6 +20,10 @@ def format_memory(mem: Memory) -> str:
     lines.append(f"  strength: {mem.strength:.2f}")
     lines.append(f"  confidence: {mem.confidence:.2f}")
     lines.append(f"  access_count: {mem.access_count}")
+    if mem.source:
+        lines.append(f"  source: {mem.source}")
+    if mem.project:
+        lines.append(f"  project: {mem.project}")
     return "\n".join(lines)
 
 
@@ -38,6 +42,10 @@ def format_scored_memory(sm: ScoredMemory) -> str:
         lines.append(f"  entities: {', '.join(sm.memory.entities)}")
     lines.append(f"  strength: {sm.memory.strength:.2f}")
     lines.append(f"  confidence: {sm.memory.confidence:.2f}")
+    if sm.memory.source:
+        lines.append(f"  source: {sm.memory.source}")
+    if sm.memory.project:
+        lines.append(f"  project: {sm.memory.project}")
     if sm.components:
         parts = ", ".join(f"{k}={v:.3f}" for k, v in sm.components.items())
         lines.append(f"  components: {parts}")

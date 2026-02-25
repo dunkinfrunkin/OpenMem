@@ -72,6 +72,16 @@ class SQLiteStore:
             END;
         """)
         self.conn.commit()
+        self._migrate()
+
+    def _migrate(self) -> None:
+        """Add columns that may not exist in older databases."""
+        for col in ("source TEXT DEFAULT ''", "project TEXT DEFAULT ''"):
+            try:
+                self.conn.execute(f"ALTER TABLE memories ADD COLUMN {col}")
+            except sqlite3.OperationalError:
+                pass  # column already exists
+        self.conn.commit()
 
     def _row_to_memory(self, row: sqlite3.Row) -> Memory:
         return Memory(
@@ -87,6 +97,8 @@ class SQLiteStore:
             access_count=row["access_count"],
             last_accessed=row["last_accessed"],
             status=row["status"],
+            source=row["source"] or "",
+            project=row["project"] or "",
         )
 
     def _row_to_edge(self, row: sqlite3.Row) -> Edge:
@@ -103,13 +115,14 @@ class SQLiteStore:
         entities_json = json.dumps(memory.entities)
         self.conn.execute(
             """INSERT INTO memories (id, type, text, gist, entities, created_at,
-               updated_at, strength, confidence, access_count, last_accessed, status)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               updated_at, strength, confidence, access_count, last_accessed, status,
+               source, project)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 memory.id, memory.type, memory.text, memory.gist, entities_json,
                 memory.created_at, memory.updated_at, memory.strength,
                 memory.confidence, memory.access_count, memory.last_accessed,
-                memory.status,
+                memory.status, memory.source, memory.project,
             ),
         )
         self.conn.commit()
@@ -188,12 +201,12 @@ class SQLiteStore:
         self.conn.execute(
             """UPDATE memories SET type=?, text=?, gist=?, entities=?,
                updated_at=?, strength=?, confidence=?, access_count=?,
-               last_accessed=?, status=? WHERE id=?""",
+               last_accessed=?, status=?, source=?, project=? WHERE id=?""",
             (
                 memory.type, memory.text, memory.gist, entities_json,
                 memory.updated_at, memory.strength, memory.confidence,
                 memory.access_count, memory.last_accessed, memory.status,
-                memory.id,
+                memory.source, memory.project, memory.id,
             ),
         )
         self.conn.commit()
@@ -201,6 +214,10 @@ class SQLiteStore:
     def all_memories(self) -> list[Memory]:
         rows = self.conn.execute("SELECT * FROM memories").fetchall()
         return [self._row_to_memory(r) for r in rows]
+
+    def all_edges(self) -> list[Edge]:
+        rows = self.conn.execute("SELECT * FROM edges").fetchall()
+        return [self._row_to_edge(r) for r in rows]
 
     def close(self) -> None:
         self.conn.close()

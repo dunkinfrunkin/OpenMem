@@ -35,6 +35,8 @@ class MemoryEngine:
         entities: list[str] | None = None,
         confidence: float = 1.0,
         gist: str | None = None,
+        source: str = "",
+        project: str = "",
     ) -> Memory:
         """Add a new memory."""
         now = time.time()
@@ -46,6 +48,8 @@ class MemoryEngine:
             created_at=now,
             updated_at=now,
             confidence=confidence,
+            source=source,
+            project=project,
         )
         return self.store.add_memory(mem)
 
