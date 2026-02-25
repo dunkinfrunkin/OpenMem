@@ -8,3 +8,4 @@ build/
 web/node_modules/
 web/build/
 web/.docusaurus/
+.env
