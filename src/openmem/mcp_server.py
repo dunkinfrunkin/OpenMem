@@ -77,6 +77,8 @@ def memory_store(
         entities=entities,
         confidence=confidence,
         gist=gist,
+        source="claude-code",
+        project=os.getcwd(),
     )
     return f"Stored memory:\n{format_memory(mem)}"
 

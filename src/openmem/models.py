@@ -19,6 +19,8 @@ class Memory:
     access_count: int = 0
     last_accessed: float | None = None
     status: str = "active"  # active | superseded | contradicted
+    source: str = ""  # e.g. "claude-code"
+    project: str = ""  # project directory path
 
 
 @dataclass
